@@ -4,20 +4,23 @@ import swagger from "@elysiajs/swagger";
 import { Elysia } from "elysia";
 import { ErrorMessages } from "./utils";
 import { decorators } from "elysia-decorators";
+import { loadControllers } from "./api";
 
 try {
   const app = new Elysia()
     .use(cors())
     .use(swagger())
     .use(bearer())
-    .use(
-      decorators({
-        controllers: [__dirname + '/api/tasks/tasks.controller.ts']
-      })
-    )
+    // .use(
+    //   decorators({
+    //     controllers: [__dirname + '/api/tasks/tasks.controller.ts']
+    //   })
+    // )
     // TODO : implement interceptor data on response .onResponse(requestLogger)
     // TODO : implement when stop server .onStop()
     .onError(({ code, error, set }) => ErrorMessages(code, error, set));
+
+    loadControllers().map(Controller => new Controller());
 
     process.on('SIGINT', app.stop);
     process.on('SIGTERM', app.stop);

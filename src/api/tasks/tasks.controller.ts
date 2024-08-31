@@ -5,7 +5,9 @@ import { Controller, Get, Post, Put, Delete } from 'elysia-decorators';
 @Controller('/tasks')
 export class TasksController {
 
-  constructor(private  tasksService: TasksService) {
+  protected readonly tasksService: TasksService
+
+  constructor() {
     this.tasksService = new TasksService();
   }
 
